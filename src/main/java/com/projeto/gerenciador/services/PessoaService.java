@@ -21,7 +21,7 @@ public class PessoaService {
     public PessoaService() {
     }
 
-    public List<Pessoa>  getPessoas() {
+    public List<Pessoa> getPessoas() {
         try {
             return pessoaRepository.findAll();
         } catch (Exception e) {
