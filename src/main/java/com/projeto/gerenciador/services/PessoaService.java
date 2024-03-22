@@ -29,6 +29,14 @@ public class PessoaService {
         }
     }
 
+    public Pessoa getPessoaById(UUID id) {
+        try {
+            return pessoaRepository.findById(id).orElse(null);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar pessoa");
+        }
+    }
+
 
 
 
