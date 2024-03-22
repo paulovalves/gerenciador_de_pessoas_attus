@@ -37,7 +37,13 @@ public class PessoaService {
         }
     }
 
-
+    public Pessoa addPessoa(Pessoa pessoa) {
+        try {
+            return pessoaRepository.save(pessoa);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao adicionar pessoa");
+        }
+    }
 
 
 }
