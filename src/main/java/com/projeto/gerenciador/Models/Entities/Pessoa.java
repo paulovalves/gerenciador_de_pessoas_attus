@@ -1,12 +1,12 @@
 package com.projeto.gerenciador.Models.Entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,13 +21,16 @@ public class Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @JdbcTypeCode(SqlTypes.UUID)
     private Long id;
 
+    @NotEmpty
+    @NotBlank
     @Column(name = "nome_completo", nullable = false)
     private String nomeCompleto;
 
-    @Column(name = "cpf", nullable = false)
+    @NotEmpty
+    @NotBlank
+    @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
