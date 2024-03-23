@@ -2,12 +2,11 @@ package com.projeto.gerenciador.controllers;
 
 import com.projeto.gerenciador.Models.Entities.Pessoa;
 import com.projeto.gerenciador.services.PessoaService;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +41,17 @@ public class PessoaController extends ApiController {
             throw new RuntimeException("Erro ao buscar pessoa");
         }
     }
+
+    @PostMapping("/adicionar")
+    public ResponseEntity<Pessoa> adicionarPessoa(@RequestBody @Valid Pessoa pessoa) {
+        try {
+            var response = pessoaService.adicionarPessoa(pessoa);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao adicionar pessoa");
+        }
+    }
+
 
 
 }
