@@ -121,4 +121,18 @@ public class PessoaService {
             throw new RuntimeException("Erro ao atualizar pessoa");
         }
     }
+
+    /**
+     * Remove uma entidade Pessoa do banco de dados.
+     *
+     * @param id O ID da entidade Pessoa a ser removida.
+     * @throws RuntimeException se ocorrer algum erro durante o processo.
+     */
+    public void removerPessoa(Long id) {
+        try {
+            pessoaRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao remover pessoa");
+        }
+    }
 }

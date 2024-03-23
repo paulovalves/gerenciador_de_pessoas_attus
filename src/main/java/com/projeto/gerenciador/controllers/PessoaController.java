@@ -61,4 +61,14 @@ public class PessoaController extends ApiController {
             throw new RuntimeException("Erro ao atualizar pessoa");
         }
     }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> deletarPessoa(@PathParam("id") Long id) {
+        try {
+            pessoaService.removerPessoa(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar pessoa");
+        }
+    }
 }
