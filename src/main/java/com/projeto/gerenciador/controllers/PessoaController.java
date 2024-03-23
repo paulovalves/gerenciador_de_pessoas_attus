@@ -2,6 +2,7 @@ package com.projeto.gerenciador.controllers;
 
 import com.projeto.gerenciador.Models.Entities.Pessoa;
 import com.projeto.gerenciador.services.PessoaService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,19 @@ public class PessoaController extends ApiController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar pessoas");
+        }
+    }
+
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<Pessoa> buscarPessoa(@PathParam("id") Long id) {
+        try {
+            var response = pessoaService.getPessoaById(id);
+            if (response == null) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar pessoa");
         }
     }
 

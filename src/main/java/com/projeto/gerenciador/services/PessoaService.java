@@ -29,7 +29,7 @@ public class PessoaService {
         }
     }
 
-    public Pessoa getPessoaById(UUID id) {
+    public Pessoa getPessoaById(Long id) {
         try {
             return pessoaRepository.findById(id).orElse(null);
         } catch (Exception e) {
