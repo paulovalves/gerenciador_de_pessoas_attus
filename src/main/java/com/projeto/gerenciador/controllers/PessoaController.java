@@ -52,6 +52,13 @@ public class PessoaController extends ApiController {
         }
     }
 
-
-
+    @PutMapping("/atualizar")
+    public ResponseEntity<Pessoa> atualizarPessoa(@RequestBody @Valid Pessoa pessoa) {
+        try {
+            var response = pessoaService.atualizarPessoa(pessoa);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar pessoa");
+        }
+    }
 }

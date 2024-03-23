@@ -96,4 +96,29 @@ public class PessoaService {
             throw new RuntimeException("Erro ao adicionar pessoa");
         }
     }
+
+    /**
+     * Atualiza uma entidade Pessoa no banco de dados.
+     *
+     * @param pessoa A entidade Pessoa a ser atualizada.
+     * @return A entidade Pessoa atualizada.
+     * @throws RuntimeException se ocorrer algum erro durante o processo.
+     */
+    public Pessoa atualizarPessoa(@RequestBody Pessoa pessoa) {
+        try {
+            var endereco = pessoa.getEnderecos();
+            var response = pessoaRepository.save(pessoa);
+
+            if(endereco != null) {
+                for (var end : endereco) {
+                    end.setPessoa(response);
+                    enderecoService.adicionarEndereco(end);
+                }
+            }
+
+            return response;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar pessoa");
+        }
+    }
 }
