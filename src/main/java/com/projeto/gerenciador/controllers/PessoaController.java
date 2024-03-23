@@ -35,7 +35,7 @@ public class PessoaController extends ApiController {
         try {
             var response = pessoaService.getPessoaById(id);
             if (response == null) {
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.notFound().build();
             }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
