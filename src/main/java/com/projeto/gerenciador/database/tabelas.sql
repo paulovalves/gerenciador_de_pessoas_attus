@@ -14,3 +14,5 @@ CREATE TABLE gerenciador.enderecos (
                                        principal BOOLEAN,
                                        pessoa_id BIGINT REFERENCES gerenciador.pessoas(id)
 );
+
+ALTER TABLE gerenciador.enderecos ADD CONSTRAINT enderecos_unique UNIQUE (numero,cep,pessoa_id,estado,cidade);
