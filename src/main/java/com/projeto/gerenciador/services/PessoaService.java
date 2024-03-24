@@ -125,8 +125,12 @@ public class PessoaService {
 
             if(endereco != null) {
                 for (var end : endereco) {
-                    end.setPessoa(response);
-                    enderecoService.adicionarEndereco(end);
+                    if(end.getId() != null) {
+                        enderecoService.atualizarEndereco(end);
+                    } else {
+                        end.setPessoa(response);
+                        enderecoService.adicionarEndereco(end);
+                    }
                 }
             }
 

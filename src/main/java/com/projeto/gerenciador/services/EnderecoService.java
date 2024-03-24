@@ -28,4 +28,13 @@ public class EnderecoService {
             throw new RuntimeException("Erro ao adicionar endereco");
         }
     }
+
+    @Transactional
+    public Endereco atualizarEndereco(Endereco endereco) {
+        try {
+            return enderecoRepository.save(endereco);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar endereco");
+        }
+    }
 }
