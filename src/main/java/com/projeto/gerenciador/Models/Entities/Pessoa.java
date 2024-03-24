@@ -36,12 +36,10 @@ public class Pessoa implements Serializable {
     @Column(name = "nome_completo", nullable = false)
     private String nomeCompleto;
 
-    @NotEmpty
-    @NotBlank
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Endereco> enderecos;
 
     @Override

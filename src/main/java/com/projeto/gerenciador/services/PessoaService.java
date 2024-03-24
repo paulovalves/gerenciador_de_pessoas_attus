@@ -1,19 +1,27 @@
 package com.projeto.gerenciador.services;
 
+import com.projeto.gerenciador.Models.Entities.Endereco;
 import com.projeto.gerenciador.Models.Entities.Pessoa;
 import com.projeto.gerenciador.repositories.PessoaRepository;
+import jakarta.persistence.Transient;
+import jakarta.transaction.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Classe de serviço para manipulação de entidades Pessoa.
  */
 @Service
+@Transactional
 public class PessoaService {
 
+    Logger logger = Logger.getLogger(PessoaService.class.getName());
     /**
      * Repositório para acesso às entidades Pessoa no banco de dados.
      */
@@ -79,21 +87,26 @@ public class PessoaService {
      * @return A entidade Pessoa adicionada.
      * @throws RuntimeException se ocorrer algum erro durante o processo.
      */
+    @Transactional
     public Pessoa adicionarPessoa(@RequestBody Pessoa pessoa) {
         try {
-            var endereco = pessoa.getEnderecos();
-            var response = pessoaRepository.save(pessoa);
+            logger.info("Adicionando pessoa: " + pessoa);
 
-            if(endereco != null) {
+            var endereco = pessoa.getEnderecos();
+            pessoa.setEnderecos(null);
+            Pessoa response = pessoaRepository.save(pessoa);
+            if(!endereco.isEmpty()) {
                 for (var end : endereco) {
-                    end.setPessoa(response);
+                    end.setPessoa(pessoa);
                     enderecoService.adicionarEndereco(end);
                 }
             }
 
+
             return response;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao adicionar pessoa");
+            logger.severe(e.getLocalizedMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,7 +120,8 @@ public class PessoaService {
     public Pessoa atualizarPessoa(@RequestBody Pessoa pessoa) {
         try {
             var endereco = pessoa.getEnderecos();
-            var response = pessoaRepository.save(pessoa);
+            pessoa.setEnderecos(null);
+            var response = pessoaRepository.saveAndFlush(pessoa);
 
             if(endereco != null) {
                 for (var end : endereco) {
@@ -118,6 +132,7 @@ public class PessoaService {
 
             return response;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new RuntimeException("Erro ao atualizar pessoa");
         }
     }
