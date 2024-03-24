@@ -2,6 +2,7 @@ package com.projeto.gerenciador.services;
 
 import com.projeto.gerenciador.Models.Entities.Endereco;
 import com.projeto.gerenciador.Models.Entities.Pessoa;
+import com.projeto.gerenciador.Models.exceptions.NotFoundException;
 import com.projeto.gerenciador.repositories.PessoaRepository;
 import jakarta.persistence.Transient;
 import jakarta.transaction.Transaction;
@@ -74,9 +75,14 @@ public class PessoaService {
      */
     public Pessoa getPessoaById(Long id) {
         try {
-            return pessoaRepository.findById(id).orElse(null);
+            var pessoa = pessoaRepository.findById(id).orElse(null);
+            if (pessoa == null) {
+                throw new NotFoundException("Pessoa não encontrada");
+            }
+            return pessoa;
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar pessoa");
+            throw new NotFoundException("Erro ao buscar pessoa");
         }
     }
 
@@ -95,7 +101,7 @@ public class PessoaService {
             var endereco = pessoa.getEnderecos();
             pessoa.setEnderecos(null);
             Pessoa response = pessoaRepository.save(pessoa);
-            if(!endereco.isEmpty()) {
+            if(endereco != null && !endereco.isEmpty()) {
                 for (var end : endereco) {
                     end.setPessoa(pessoa);
                     enderecoService.adicionarEndereco(end);
@@ -123,9 +129,9 @@ public class PessoaService {
             pessoa.setEnderecos(null);
             var response = pessoaRepository.saveAndFlush(pessoa);
 
-            if(endereco != null) {
+            if(endereco != null && !endereco.isEmpty()) {
                 for (var end : endereco) {
-                    if(end.getId() != null) {
+                    if(end != null && end.getId() != null) {
                         enderecoService.atualizarEndereco(end);
                     } else {
                         end.setPessoa(response);
@@ -136,6 +142,7 @@ public class PessoaService {
 
             return response;
         } catch (Exception e) {
+            logger.severe(e.getLocalizedMessage());
             e.printStackTrace();
             throw new RuntimeException("Erro ao atualizar pessoa");
         }
